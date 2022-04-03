@@ -18,87 +18,97 @@ import pandas
 
 file = open("cs340_hw01_salesData01.csv")
 
+
 def createData(file):
-  return pandas.read_csv("cs340_hw01_salesData01.csv")
+    """
+    Returns a pandas.core.frame.DataFrame object from a csv file
+    """
+    return pandas.read_csv("cs340_hw01_salesData01.csv")
+
 
 def printByProduct(data):
-  rsltData = data.sort_values(by = "Product")
-  print(rsltData)
+    """
+    Prints the data returned from the csv file sorted by 'Product'
+    """
+    rsltData = data.sort_values(by="Product")
+    print(rsltData)
 
 
 def createHeaderRows(file):
-  csvreader = csv.reader(file)
+    """
+    Reads a csv file and returns the header and the rows of the csv file
+    """
+    csvreader = csv.reader(file)
+    header = next(csvreader)
+    rows = []
 
-  header = next(csvreader)
-  
+    for row in csvreader:
+        rows.append(row)
 
+    file.close()
 
-  rows = []
+    return header, rows
 
-  for row in csvreader:
-    rows.append(row)
-
-  file.close()
-  
-  return header, rows
 
 def findName(rows, name):
-  name = name.lower()
-  num = 0
-  for row in rows:
-    print(row[7])
-    names = row[7].split()
-    for n in names:
-      if n.lower() == name:
-        num += 1
+    """
+    Searches over rows for a search over the csv file for a particular name
+    """
+    name = name.lower()
+    num = 0
+    for row in rows:
+        names = row[7].split()
+        for n in names:
+            if n.lower() == name:
+                num += 1
 
-  print("Number of NAMES")
-  print(num)
-
-'''
-rows.sort(key=lambda rows: rows[1])
-
-num = 0
-for row in rows:
-  names = row[7].split()
-  for name in names:
-    if name.lower() == "amanda":
-      num += 1
-
-print("NUMBER OF AMANDAS!")
-print(num)
-tot = 0 
-ind = 0
-
-for row in rows:
-  if len(row[2]) > 0:
-    tot += int(row[2])
-    ind += 1
-  else:
-    ind += 1
+    print("Number of " + name + 's:' + str(num))
+    # print(num)
 
 
-print()
-print("AVERAGE")
-print(round(tot/ind, 2))
-for row in rows:
-  if row[6].lower() == "united states":
-    row[6] = "USA"
+def getAverage(rows):
+    """
+    Returns the average of the rows. The else statement could be removed if
+    the empty values were wanted to be handled differently
+    """
+    tot = 0
+    ind = 0
 
-fileName = "new_csv.csv"
+    for row in rows:
+        if len(row[2]) > 0:
+            tot += int(row[2])
+            ind += 1
 
-with open(fileName, 'w', newline="") as file:
-  csvwriter = csv.writer(file)
-  csvwriter.writerow(header)
-  csvwriter.writerows(rows)
+        else:
+            ind += 1
 
-for row in rows:
-  print(row)
-  print()
-'''
+    print("Average Transaction Total: " + str(round(tot/ind, 2)))
+
+
+def changeUSA(rows):
+    """
+    Changes the name of the country from all variations of united states to USA
+    """
+    for row in rows:
+        if row[6].lower() == "united states":
+            row[6] = "USA"
+
+    return rows
+
+
+def createNewFile(fileName, header, rows):
+    """
+    Creates a new file given a file name, the header, and the rows of the csv file
+    """
+    with open(fileName, 'w', newline="") as file:
+        csvwriter = csv.writer(file)
+        csvwriter.writerow(header)
+        csvwriter.writerows(rows)
+
+
 data = createData(file)
-
 printByProduct(data)
 header, rows = createHeaderRows(file)
 findName(rows, "amanda")
-
+getAverage(rows)
+createNewFile("new_csv.csv", header, changeUSA(rows))
