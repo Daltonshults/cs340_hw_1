@@ -1,7 +1,7 @@
 import csv
 import pandas
 
-'''
+"""
 0 = Transaction_date
 1 = Product
 2 = Price
@@ -14,7 +14,7 @@ import pandas
 9 = Last_Login
 10 = Latitude
 11 = Longitude
-'''
+"""
 
 file = open("cs340_hw01_salesData01.csv")
 
@@ -40,6 +40,7 @@ def createHeaderRows(file):
     """
     csvreader = csv.reader(file)
     header = next(csvreader)
+    
     rows = []
 
     for row in csvreader:
@@ -109,8 +110,10 @@ def createNewFile(fileName, header, rows):
 data = createData(file)
 printByProduct(data)
 print()
+
 header, rows = createHeaderRows(file)
 findName(rows, "amanda")
 print()
+
 getAverage(rows)
 createNewFile("new_csv.csv", header, changeUSA(rows))
