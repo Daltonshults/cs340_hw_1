@@ -15,15 +15,15 @@ import pandas
 10 = Latitude
 11 = Longitude
 """
+def createFile(file):
+    return open(file)
 
-file = open("cs340_hw01_salesData01.csv")
 
-
-def createData(file):
+def createData(fileName):
     """
     Returns a pandas.core.frame.DataFrame object from a csv file
     """
-    return pandas.read_csv("cs340_hw01_salesData01.csv")
+    return pandas.read_csv(fileName)
 
 
 def printByProduct(data):
@@ -40,7 +40,7 @@ def createHeaderRows(file):
     """
     csvreader = csv.reader(file)
     header = next(csvreader)
-    
+
     rows = []
 
     for row in csvreader:
@@ -90,10 +90,12 @@ def changeUSA(rows):
     """
     Changes the name of the country from all variations of united states to USA
     """
+    changes = 0
     for row in rows:
         if row[6].lower() == "united states":
             row[6] = "USA"
-
+            changes +=1
+    print(str(changes) + "CHANGES")
     return rows
 
 
@@ -105,15 +107,21 @@ def createNewFile(fileName, header, rows):
         csvwriter = csv.writer(file)
         csvwriter.writerow(header)
         csvwriter.writerows(rows)
+        
+def main():
+    fileName = "cs340_hw01_salesData01.csv"
+    file = createFile(fileName)
+    data = createData(fileName)
+    printByProduct(data)
+    print()
+    
+    header, rows = createHeaderRows(file)
+    findName(rows, "amanda")
+    print()
+    
+    getAverage(rows)
+    createNewFile("new_csv.csv", header, changeUSA(rows))
 
 
-data = createData(file)
-printByProduct(data)
-print()
-
-header, rows = createHeaderRows(file)
-findName(rows, "amanda")
-print()
-
-getAverage(rows)
-createNewFile("new_csv.csv", header, changeUSA(rows))
+if __name__ == "__main__":
+    main()
