@@ -17,27 +17,45 @@ import pandas
 '''
 
 file = open("cs340_hw01_salesData01.csv")
-data = pandas.read_csv("cs340_hw01_salesData01.csv")
 
-def printByProduct(file):
+def createData(file):
+  return pandas.read_csv("cs340_hw01_salesData01.csv")
+
+def printByProduct(data):
   rsltData = data.sort_values(by = "Product")
-
   print(rsltData)
 
-csvreader = csv.reader(file)
 
-header = next(csvreader)
+def createHeaderRows(file):
+  csvreader = csv.reader(file)
 
-print(header)
-
-rows = []
-
-for row in csvreader:
-  rows.append(row)
-
-file.close()
+  header = next(csvreader)
+  
 
 
+  rows = []
+
+  for row in csvreader:
+    rows.append(row)
+
+  file.close()
+  
+  return header, rows
+
+def findName(rows, name):
+  name = name.lower()
+  num = 0
+  for row in rows:
+    print(row[7])
+    names = row[7].split()
+    for n in names:
+      if n.lower() == name:
+        num += 1
+
+  print("Number of NAMES")
+  print(num)
+
+'''
 rows.sort(key=lambda rows: rows[1])
 
 num = 0
@@ -77,5 +95,10 @@ with open(fileName, 'w', newline="") as file:
 for row in rows:
   print(row)
   print()
+'''
+data = createData(file)
 
-printByProduct(file)
+printByProduct(data)
+header, rows = createHeaderRows(file)
+findName(rows, "amanda")
+
