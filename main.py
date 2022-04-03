@@ -19,7 +19,10 @@ import pandas
 file = open("cs340_hw01_salesData01.csv")
 data = pandas.read_csv("cs340_hw01_salesData01.csv")
 
-print(data)
+def printByProduct(file):
+  rsltData = data.sort_values(by = "Product")
+
+  print(rsltData)
 
 csvreader = csv.reader(file)
 
@@ -37,13 +40,6 @@ file.close()
 
 rows.sort(key=lambda rows: rows[1])
 
-for row in rows:
-  print()
-  print("New Transaction")
-
-  for i in row:
-    print(i)
-
 num = 0
 for row in rows:
   names = row[7].split()
@@ -53,4 +49,33 @@ for row in rows:
 
 print("NUMBER OF AMANDAS!")
 print(num)
+tot = 0 
+ind = 0
 
+for row in rows:
+  if len(row[2]) > 0:
+    tot += int(row[2])
+    ind += 1
+  else:
+    ind += 1
+
+
+print()
+print("AVERAGE")
+print(round(tot/ind, 2))
+for row in rows:
+  if row[6].lower() == "united states":
+    row[6] = "USA"
+
+fileName = "new_csv.csv"
+
+with open(fileName, 'w', newline="") as file:
+  csvwriter = csv.writer(file)
+  csvwriter.writerow(header)
+  csvwriter.writerows(rows)
+
+for row in rows:
+  print(row)
+  print()
+
+printByProduct(file)
