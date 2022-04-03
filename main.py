@@ -62,7 +62,7 @@ def findName(rows, name):
             if n.lower() == name:
                 num += 1
 
-    print("Number of " + name + 's:' + str(num))
+    print("Number of " + name.capitalize() + 's: ' + str(num))
     # print(num)
 
 
@@ -108,7 +108,9 @@ def createNewFile(fileName, header, rows):
 
 data = createData(file)
 printByProduct(data)
+print()
 header, rows = createHeaderRows(file)
 findName(rows, "amanda")
+print()
 getAverage(rows)
 createNewFile("new_csv.csv", header, changeUSA(rows))
